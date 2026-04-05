@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package tts;
+
+service TTSService {
+  rpc Synthesize (SynthesizeRequest) returns (SynthesizeResponse);
+}
+
+message SynthesizeRequest {
+  string text  = 1;
+  float  speed = 3; // speaking speed multiplier, 0.5–2.0 — defaults to 1.0
+}
+
+message SynthesizeResponse {
+  bytes audio       = 1; // WAV-encoded audio (PCM 16-bit, mono)
+  int32 sample_rate = 2; // always 24000 for kokoro-82m-v1.0
+}

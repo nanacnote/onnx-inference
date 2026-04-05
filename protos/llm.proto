@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package llm;
+
+service LLMService {
+  rpc Generate (GenerateRequest) returns (GenerateResponse);
+}
+
+message GenerateRequest {
+  string prompt = 1;
+  int32  max_new_tokens = 2;  // 0 → server default (256)
+  float  temperature    = 3;  // 0.0 → greedy decoding
+}
+
+message GenerateResponse {
+  string text = 1;
+}

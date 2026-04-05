@@ -1,0 +1,11 @@
+# Place model artifacts here before starting the server.
+# These files are not committed — download or export them separately.
+#
+# Required files:
+#   model.onnx       BGE-small-en-v1.5 ONNX model weights
+#   tokenizer.json   HuggingFace tokenizer definition
+#
+# Source: https://huggingface.co/BAAI/bge-small-en-v1.5
+
+*
+!.gitignore

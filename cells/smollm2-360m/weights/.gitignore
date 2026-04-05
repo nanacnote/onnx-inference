@@ -1,0 +1,12 @@
+# Place model artifacts here before starting the server.
+# These files are not committed — download or export them separately.
+#
+# Required files:
+#   model_q4f16.onnx        SmolLM2-360M-Instruct quantized ONNX model
+#   tokenizer.json          HuggingFace tokenizer definition
+#   tokenizer_config.json   Tokenizer configuration (eos_token, chat_template, etc.)
+#
+# Source: https://huggingface.co/HuggingFaceTB/SmolLM2-360M-Instruct
+
+*
+!.gitignore

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package ocr;
+
+service OCRService {
+  rpc Recognize(RecognizeRequest) returns (RecognizeResponse);
+}
+
+// Raw encoded image bytes — JPEG, PNG, BMP, TIFF, or WebP.
+message RecognizeRequest {
+  bytes image = 1;
+}
+
+message TextResult {
+  string text = 1;
+  float confidence = 2;
+  // Flat quadrilateral bounding box: [x1,y1, x2,y2, x3,y3, x4,y4]
+  repeated float box = 3;
+}
+
+message RecognizeResponse {
+  repeated TextResult results = 1;
+}

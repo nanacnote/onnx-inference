@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package embedding;
+
+service EmbeddingService {
+  rpc GetEmbedding (EmbeddingRequest) returns (EmbeddingResponse);
+}
+
+message EmbeddingRequest {
+  string text = 1;
+}
+
+message EmbeddingResponse {
+  repeated float vector = 1;
+  int32 dimensions = 2;
+}

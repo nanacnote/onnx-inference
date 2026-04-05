@@ -1,0 +1,11 @@
+# Place model artifacts here before starting the server.
+# These files are not committed — download or export them separately.
+#
+# Required files:
+#   kokoro-v1.0.fp16.onnx   Kokoro TTS model weights (FP16)
+#   voice_af_sky.npy         af_sky voice style embedding (float32 array)
+#
+# Source: https://github.com/thewh1teagle/kokoro-onnx
+
+*
+!.gitignore

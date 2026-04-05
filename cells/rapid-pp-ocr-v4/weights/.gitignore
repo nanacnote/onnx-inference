@@ -1,0 +1,10 @@
+# No model files are required here.
+#
+# Unlike other cells, rapid-pp-ocr-v4 uses RapidOCR which bundles the
+# PP-OCRv4 model weights inside the Python package itself. They are resolved
+# automatically at runtime — nothing needs to be placed in this directory.
+#
+# Source: https://github.com/RapidAI/RapidOCR
+
+*
+!.gitignore

@@ -1,0 +1,155 @@
+services:
+
+  gateway:
+    build:
+      context: ./nginx
+    image: onnx-inference/gateway:latest
+    ports:
+      - "50050:50050"
+    depends_on:
+      bge-small-v15:
+        condition: service_healthy
+      kokoro-82m-v1.0:
+        condition: service_healthy
+      rapid-pp-ocr-v4:
+        condition: service_healthy
+      smollm2-360m:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:8080/healthz" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - inference
+
+  bge-small-v15:
+    build:
+      context: .
+      args:
+        CELL: bge-small-v15
+        PORT: "50051"
+    image: onnx-inference/bge-small-v15:latest
+    ports:
+      - "50051:50051"
+    environment:
+      PORT: "50051"
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "python", "healthcheck.py", "localhost:50051" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - inference
+
+  kokoro-82m-v1.0:
+    build:
+      context: .
+      args:
+        CELL: kokoro-82m-v1.0
+        PORT: "50052"
+    image: onnx-inference/kokoro-82m-v1.0:latest
+    ports:
+      - "50052:50052"
+    environment:
+      PORT: "50052"
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "python", "healthcheck.py", "localhost:50052" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s
+    deploy:
+      resources:
+        limits:
+          memory: 4g
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - inference
+
+  rapid-pp-ocr-v4:
+    build:
+      context: .
+      args:
+        CELL: rapid-pp-ocr-v4
+        PORT: "50053"
+    image: onnx-inference/rapid-pp-ocr-v4:latest
+    ports:
+      - "50053:50053"
+    environment:
+      PORT: "50053"
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "python", "healthcheck.py", "localhost:50053" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - inference
+
+  smollm2-360m:
+    build:
+      context: .
+      args:
+        CELL: smollm2-360m
+        PORT: "50054"
+    image: onnx-inference/smollm2-360m:latest
+    ports:
+      - "50054:50054"
+    environment:
+      PORT: "50054"
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "python", "healthcheck.py", "localhost:50054" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    deploy:
+      resources:
+        limits:
+          memory: 2g
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - inference
+
+networks:
+  inference:
+    driver: bridge

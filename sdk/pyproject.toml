@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "onnx-inference"
+dynamic = ["version"]
+description = "Python SDK for the onnx-inference gRPC gateway"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Owusu K", email = "owusu@bohyen.space" }]
+requires-python = ">=3.11"
+keywords = ["onnx", "inference", "grpc", "embedding", "tts", "ocr", "llm"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+dependencies = [
+    "grpcio>=1.64.1",
+    "protobuf>=4.21.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/nanacnote/onnx-inference"
+Repository = "https://github.com/nanacnote/onnx-inference"
+Documentation = "https://github.com/nanacnote/onnx-inference/blob/main/docs/connecting.md"
+"Bug Tracker" = "https://github.com/nanacnote/onnx-inference/issues"
+
+[tool.hatch.version]
+source = "vcs"
+# Strip the leading 'v' from tags like v0.2.0 → 0.2.0
+tag-pattern = "v(?P<version>.+)"
+# sdk/ is a subdirectory — point setuptools-scm at the repo root where .git lives
+raw-options = { root = ".." }
+
+[tool.hatch.build.hooks.vcs]
+version-file = "onnx_inference/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["onnx_inference"]
