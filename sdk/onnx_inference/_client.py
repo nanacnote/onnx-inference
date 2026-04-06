@@ -36,7 +36,10 @@ class InferenceClient:
     """
 
     def __init__(self, address: str = "localhost:50050") -> None:
-        self._channel = grpc.insecure_channel(address)
+        self._channel = grpc.insecure_channel(
+            address,
+            options=[("grpc.max_receive_message_length", -1)],
+        )
         self._embedding = embedding_pb2_grpc.EmbeddingServiceStub(self._channel)
         self._tts = tts_pb2_grpc.TTSServiceStub(self._channel)
         self._ocr = ocr_pb2_grpc.OCRServiceStub(self._channel)

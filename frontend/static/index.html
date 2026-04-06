@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>onnx-inference</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header>
+  <span class="header-title">onnx-inference</span>
+  <span class="header-sub">local model playground</span>
+</header>
+
+<main>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="tab-llm" role="tab" aria-selected="true">LLM</button>
+    <button class="tab-btn" data-tab="tab-tts" role="tab" aria-selected="false">TTS</button>
+    <button class="tab-btn" data-tab="tab-embed" role="tab" aria-selected="false">Embedding</button>
+    <button class="tab-btn" data-tab="tab-ocr" role="tab" aria-selected="false">OCR</button>
+  </nav>
+
+  <!-- ── LLM ─────────────────────────────────────────────────────────────── -->
+  <section class="tab-panel" id="tab-llm" role="tabpanel">
+    <form id="llm-form" novalidate>
+      <div class="field">
+        <label for="llm-prompt">Prompt</label>
+        <textarea id="llm-prompt" rows="6" placeholder="Ask anything…"></textarea>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label for="llm-tokens">Max new tokens</label>
+          <div class="range-row">
+            <input type="range" id="llm-tokens" min="0" max="512" step="16" value="256">
+            <output for="llm-tokens">256</output>
+          </div>
+        </div>
+        <div class="field">
+          <label for="llm-temp">Temperature</label>
+          <div class="range-row">
+            <input type="range" id="llm-temp" min="0" max="2" step="0.05" value="0.7">
+            <output for="llm-temp">0.7</output>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn-primary">Generate</button>
+    </form>
+    <div class="result hidden" id="llm-result">
+      <div class="result-label">Response — <span class="model-tag">smollm2-360m</span></div>
+      <pre class="result-pre" id="llm-output"></pre>
+      <p class="err-text" id="llm-err"></p>
+    </div>
+  </section>
+
+  <!-- ── TTS ─────────────────────────────────────────────────────────────── -->
+  <section class="tab-panel hidden" id="tab-tts" role="tabpanel">
+    <form id="tts-form" novalidate>
+      <div class="field">
+        <label for="tts-text">Text</label>
+        <textarea id="tts-text" rows="4" placeholder="Enter text to speak…"></textarea>
+      </div>
+      <div class="field" style="max-width:320px">
+        <label for="tts-speed">Speed</label>
+        <div class="range-row">
+          <input type="range" id="tts-speed" min="0.5" max="2.0" step="0.05" value="1.0">
+          <output for="tts-speed">1.0</output>
+        </div>
+      </div>
+      <button type="submit" class="btn-primary">Synthesize</button>
+    </form>
+    <div class="result hidden" id="tts-result">
+      <div class="result-label">Audio — <span class="model-tag">kokoro-82m-v1.0</span></div>
+      <audio id="tts-player" controls></audio>
+      <p class="err-text" id="tts-err"></p>
+    </div>
+  </section>
+
+  <!-- ── Embedding ────────────────────────────────────────────────────────── -->
+  <section class="tab-panel hidden" id="tab-embed" role="tabpanel">
+    <form id="embed-form" novalidate>
+      <div class="field">
+        <label for="embed-text">Text</label>
+        <input type="text" id="embed-text" placeholder="Enter text to embed…">
+      </div>
+      <button type="submit" class="btn-primary">Embed</button>
+    </form>
+    <div class="result hidden" id="embed-result">
+      <div class="result-label">Vector — <span class="model-tag">bge-small-v15</span></div>
+      <p class="vector-meta" id="embed-meta"></p>
+      <div class="vector-chart" id="embed-bars" title="Each bar is one dimension. Blue = positive, red = negative."></div>
+      <button type="button" class="btn-link" id="embed-toggle">Show full vector</button>
+      <pre class="result-pre hidden" id="embed-full"></pre>
+      <p class="err-text" id="embed-err"></p>
+    </div>
+  </section>
+
+  <!-- ── OCR ──────────────────────────────────────────────────────────────── -->
+  <section class="tab-panel hidden" id="tab-ocr" role="tabpanel">
+    <form id="ocr-form" novalidate>
+      <div class="field">
+        <label>Image</label>
+        <label class="file-drop" id="ocr-drop">
+          <span class="drop-label" id="ocr-drop-label">Click to select an image — JPEG, PNG, BMP, TIFF, WebP</span>
+          <input type="file" id="ocr-input" accept="image/*">
+        </label>
+      </div>
+      <button type="submit" class="btn-primary">Recognise</button>
+    </form>
+    <div class="result hidden" id="ocr-result">
+      <div class="result-label">Results — <span class="model-tag">rapid-pp-ocr-v4</span></div>
+      <div class="ocr-frame hidden" id="ocr-frame">
+        <img id="ocr-img" alt="">
+        <canvas id="ocr-canvas"></canvas>
+      </div>
+      <table class="ocr-table hidden" id="ocr-table">
+        <thead><tr><th>#</th><th>Text</th><th>Confidence</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="no-results hidden" id="ocr-none">No text detected.</p>
+      <p class="err-text" id="ocr-err"></p>
+    </div>
+  </section>
+
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

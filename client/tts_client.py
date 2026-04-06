@@ -35,7 +35,9 @@ def synthesize(
     host: str = "localhost:50050",
 ) -> bytes:
     """Request WAV audio from the TTS server and return the raw bytes."""
-    with grpc.insecure_channel(host) as channel:
+    with grpc.insecure_channel(
+        host, options=[("grpc.max_receive_message_length", -1)]
+    ) as channel:
         stub = tts_pb2_grpc.TTSServiceStub(channel)
         response: tts_pb2.SynthesizeResponse = stub.Synthesize(
             tts_pb2.SynthesizeRequest(text=text, speed=speed)

@@ -150,6 +150,27 @@ services:
     networks:
       - inference
 
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    image: onnx-inference/frontend:latest
+    ports:
+      - "8081:8080"
+    environment:
+      GATEWAY_ADDRESS: "gateway:50050"
+    depends_on:
+      gateway:
+        condition: service_started
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - inference
+
 networks:
   inference:
     driver: bridge
